@@ -41,7 +41,7 @@ namespace SynOS_v2
             Print("Starte Input Thread...", true, ConsoleColor.Cyan);
             ProgramLoop();
         }
-        static RootAplication rootApplication = new RootAplication();
+        public static RootAplication rootApplication = new RootAplication();
         static void ProgramLoop()
         {
             Console.WriteLine("Start program loop...");

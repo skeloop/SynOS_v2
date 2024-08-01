@@ -12,28 +12,16 @@ namespace SynOS_v2.Applications
     {
         ListSelection listSelection = new ListSelection();
 
-        public override void Start()
+        public override void Update()
         {
-            for (int i = 0; i < 6 ; i++)
-            {
-                Console.Clear();
-                OS.Print("SynxOS - Hauptmenü", false, ConsoleColor.DarkBlue);
-                OS.Print(" | ", false, ConsoleColor.DarkGray);
-                OS.Print("Hinweis", true, ConsoleColor.Blue);
-                OS.Print("", true);
-                OS.Print("Diese Anwendung ist möglicherweise instabil und kann zu abstürzen führen.", true);
-                var second = 5 - i;
-                OS.Print("Geht weiter in ("+(second) +")", true);
-                Thread.Sleep(1000);
-            }
+            Console.Clear();
             List<Application> applications = new List<Application>();
             foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
             {
-                Console.WriteLine("--> "+item.GetType().Name);
-                listSelection.elements.Add(item.GetType().Name);
+                listSelection.elements.Add($"&6└ {item.GetType().Name}");
                 applications.Add(item);
             }
-            SelectionInformation selection = listSelection.Show();
+            SelectionInformation selection = listSelection.Show("&6┌ &3Installierte Apps\n", "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ┌─Steuerung Tabelle\n[Pfeiltaste hoch] - Nach oben\n[Pfeiltaste runter] - Nach unten\n[Enter] - Auswählen");
             if (selection.selection == typeof(SelectionReturnException))
             {
                 OS.Print("Irgendetwas hat einen Programm-Schleifenbruch verursacht!", true, ConsoleColor.Red);
@@ -43,8 +31,7 @@ namespace SynOS_v2.Applications
                     Console.ReadKey();
                 }
             }
-            var app = ApplicationManager.GetApplications("SynOS_v2.Applications");
-            app[selection.selectionIndex].Run();
+            applications[selection.selectionIndex].Run();
         }
 
         public override void Init()

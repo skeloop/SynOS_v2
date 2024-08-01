@@ -14,8 +14,8 @@ namespace Libary
 
         public ApplicationExitException Run()
         {
+            running = true;
             Init();
-            Start();
             while (running)
             {
                 Update();
@@ -33,13 +33,6 @@ namespace Libary
             Console.WriteLine("(This message cannot be disabled)");
         }
 
-        public virtual void Start()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Warning! Empty application setup.");
-            Console.WriteLine("Please add 'Start()' function to your application\n\n\n\n");
-            Console.ResetColor();
-        }
         public virtual void Update()
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -48,6 +41,7 @@ namespace Libary
             Console.WriteLine("Pressing any key continues the loop...");
             Console.ResetColor();
             Console.ReadKey();
+            Stop();
 
         }
         public virtual void Stop()
@@ -64,5 +58,21 @@ namespace Libary
         {
 
         }
+        /*
+        public void Warnig()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Clear();
+                Print.Add("SynxOS - Hauptmenü", false, ConsoleColor.DarkBlue);
+                Print.Add(" | ", false, ConsoleColor.DarkGray);
+                Print.Add("Hinweis", true, ConsoleColor.Blue);
+                Print.Add("", true);
+                Print.Add("Diese Anwendung ist möglicherweise instabil und kann zu abstürzen führen.", true);
+                var second = 5 - i;
+                Print.Add("Geht weiter in (" + (second) + ")...", true);
+                Thread.Sleep(1000);
+            }
+        }*/
     }
 }

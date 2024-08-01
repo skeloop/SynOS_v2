@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Libary;
 using Libary.Components;
+using Libary.Extension;
 
 namespace SynOS_v2.Applications
 {
@@ -16,22 +18,27 @@ namespace SynOS_v2.Applications
 
         public override void Init()
         {
-            
-        }
-
-        public override void Start()
-        {
-            Console.WriteLine("C# Objektkatalog");
+            Console.WriteLine("C# Objektkatalog lädt...");
             foreach (var item in OS.GetAllClassesInNamespace())
             {
+                $"&6... &3{item.Name} &5gefunden".Print();
                 object exampleInstance = Activator.CreateInstance(item);
                 classSelection.elements.Add(exampleInstance);
+                Thread.Sleep(RandomNumberGenerator.GetInt32(100, 1500));
             }
         }
 
+
         public override void Update()
         {
-            HandleInput();
+            var ex = HandleInput();
+            switch(ex)
+            {
+                case ApplicationExitException.exit:
+                    Stop();
+                    OS.rootApplication.Run();
+                    return;
+            }
             Console.Clear();
             Console.WriteLine("Alle Klassen im Namespace:");
             ListSelection subList = new ListSelection();
@@ -45,6 +52,7 @@ namespace SynOS_v2.Applications
             foreach(var info in infos)
             {
                 string output = $"{info.variableModifier} | {info.variableType} | {info.variableName} = {info.variableValue}";
+
                 OS.Print($"{info.variableModifier}", false, ConsoleColor.DarkBlue);
                 OS.Print(" | ", false, ConsoleColor.DarkGray);
                 OS.Print($"{info.variableType}", false, ConsoleColor.Blue);
@@ -73,7 +81,7 @@ namespace SynOS_v2.Applications
             variablesSelection.Show();
         }
 
-        void HandleInput()
+        ApplicationExitException HandleInput()
         {
             Console.WriteLine("[i] Um diese Anwenung zu schließen drücke ESC");
             Console.WriteLine("Drücke irgendwas um fortzufahren...");
@@ -81,6 +89,10 @@ namespace SynOS_v2.Applications
             if (key == ConsoleKey.Escape)
             {
                 Stop();
+                return ApplicationExitException.exit;
+            } else
+            {
+                return ApplicationExitException.restart;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Libary.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,18 +13,20 @@ namespace Libary.Components
     {
         public object selection;
         public int selectionIndex;
+        public bool canSelected;
     }
     public class ListSelection
     {
+
         public ListSelection subListSelection;
         public List<object> elements = new List<object>();
-        public bool canSelected = true;
         /// <summary>
         /// Zeigt eine Liste mit auswählbaren Elementen
         /// </summary>
         /// <returns>Gibt 'SelectionInformation' zurück. Enthält weitere Infos für das ausgewählte Element</returns>
-        public SelectionInformation Show()
+        public SelectionInformation Show(string header = "", string sub = "", bool clearScreen = true)
         {
+            Console.Clear();
             int currentIndex = 0;
             SelectionInformation selection = new SelectionInformation();
             while (true)
@@ -32,20 +35,23 @@ namespace Libary.Components
                 {
                     break;
                 }
-                Console.Clear();
+                if (clearScreen) Console.Clear();
+                if (header != "")
+                {
+                    header.Print();
+                    Console.ResetColor();
+                }
                 int i = 0;
                 foreach(var element in elements)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     if (i == currentIndex)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("> " + element.ToString());
+                        $"&4{element.ToString()} &5‹".Print();
                     }
-                    else Console.WriteLine(element.ToString());
+                    else $"&6{element.ToString()}".Print();
                     i++;
-                    Console.ResetColor();
                 }
+                sub.Print();
                 selection.selectionIndex = currentIndex;
                 selection.selection = elements[currentIndex];
                 ConsoleKey key = Console.ReadKey().Key;

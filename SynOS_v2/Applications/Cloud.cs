@@ -4,9 +4,41 @@ namespace SynOS_v2.Applications
 {
     public class Cloud : Application
     {
-        public override void Start()
+        public override void Update()
         {
-            Animation();
+            OS.Print("");
+            OS.Print(" ┌── Gebe einen Command ein");
+            Console.Write(" ");
+            var command = Console.ReadLine();
+            CheckCommand(command);
+        }
+
+        void CheckCommand(string cmd)
+        {
+            switch (cmd)
+            {
+                case "help":
+                    OS.Print("\nHilfemenü", true);
+                    OS.Print("├ admin > Öffnet die Administration", true);
+                    OS.Print("├ help > Ruft dieses Menü auf", true);
+                    OS.Print("├ list > Zeigt den Inhalt des aktuellen Ordners", true);
+                    OS.Print("├ back > Navigiert zurück", true);
+                    OS.Print("├ cd 'ordner_1/test_ordner/ziel_ordner' > Navigiert zu 'ziel_ordner'", true);
+                    OS.Print("├ copy Ordner/Dateiname > Kopiert das angegebene Objekt", true);
+                    OS.Print("├ cut Ordner/Dateiname > Schneidet das angegebene Objekt aus", true);
+                    OS.Print("├ paste Ordner/Dateiname > Fügt das angegebene Objekt hinzu", true);
+                    OS.Print("├ delete Ordner/Dateiname > Löscht das angegebene Objekt", true);
+                    OS.Print("├ create 'folder/file' name > Erstellt einen Ordner oder eine Datei mit dem angegebenen Name", true);
+                    OS.Print("├ buffer 'create, delete, append, dispose' 'filename'", true);
+                    OS.Print("├ open 'file' > Öffnet eine Datei", true);
+                    OS.Print("└ request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an", true);
+                    break;
+                case "admin":
+                    OS.Print("\nAdministration", true);
+                    OS.Print("├ update *force* > Führt ein Update der Systemdatein durch und stellt diese für den publish bereit.\n                   Bei bedarf kann dieser Vorgang erzwungen werden.", true);
+                    OS.Print("└ request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an", true);
+                    break;
+            }
         }
 
         void Animation()

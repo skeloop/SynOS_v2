@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Libary
 {
-    public class WindowCreator
+    public class WindowHelper
     {
         public static void CreateWindow(int width, int height)
         {

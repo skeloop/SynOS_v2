@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+
+using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Reflection;
 using Microsoft.VisualBasic.FileIO;
 using SynOS_v2;
+
 class Applicationimporter
 {
     public void Start()
@@ -14,7 +16,8 @@ class Applicationimporter
         string code = File.ReadAllText(Path.Combine(filePath, "SynOS", "TestMod.cs"));
 
         OS.Print(Path.Combine(filePath, "SynOS", "TestMod.cs"), true, ConsoleColor.DarkGray);
-        OS.Print("TestMod.cs", true, ConsoleColor.Yellow);
+        OS.Print("└─ ", false, ConsoleColor.DarkGray);
+        OS.Print("TestMod.cs wird geladen...", true, ConsoleColor.Yellow);
 
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code);
         CSharpCompilation compilation = CSharpCompilation.Create(
@@ -26,11 +29,14 @@ class Applicationimporter
         using (var ms = new MemoryStream())
         {
             var result = compilation.Emit(ms);
-            OS.Print(result.ToString(), true, ConsoleColor.Green);
             if (!result.Success)
             {
                 foreach (var diagnostic in result.Diagnostics)
                 {
+                    OS.Print("Fehler ", false, ConsoleColor.Red);
+                    OS.Print("beim laden von ", false, ConsoleColor.DarkGray);
+                    OS.Print("TestMod.cs", true, ConsoleColor.Gray);
+                    OS.Print("└─ ", false, ConsoleColor.DarkGray);
                     OS.Print(diagnostic.ToString(), true, ConsoleColor.Red);
                 }
                 return;
@@ -49,7 +55,7 @@ class Applicationimporter
                 catch(Exception ex)
                 {
                     SynOS_v2.Debug.Log(ex.ToString(), SynOS_v2.DebugType.fatal);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     return;
                 }
                 try
@@ -60,7 +66,7 @@ class Applicationimporter
                 } catch (Exception ex)
                 {
                     SynOS_v2.Debug.Log(ex.ToString(), SynOS_v2.DebugType.fatal);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                     return;
                 }
 
