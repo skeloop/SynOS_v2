@@ -5,6 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <StartupObject>SynOS_v2.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,11 @@
     <Reference Include="Forms">
       <HintPath>..\Forms\bin\Debug\net8.0-windows\Forms.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Libary" />
+    <Using Include="System" />
   </ItemGroup>
 
 </Project>
