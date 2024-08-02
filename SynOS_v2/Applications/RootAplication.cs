@@ -11,16 +11,9 @@ namespace SynOS_v2.Applications
     public class RootAplication : Application
     {
         ListSelection listSelection = new ListSelection();
-
+        List<Application> loadedApplications = new List<Application>();
         public override void Update()
         {
-            Console.Clear();
-            List<Application> applications = new List<Application>();
-            foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
-            {
-                listSelection.elements.Add($"&6└ {item.GetType().Name}");
-                applications.Add(item);
-            }
             SelectionInformation selection = listSelection.Show("&6┌ &3Installierte Apps\n", "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ┌─Steuerung Tabelle\n[Pfeiltaste hoch] - Nach oben\n[Pfeiltaste runter] - Nach unten\n[Enter] - Auswählen");
             if (selection.selection == typeof(SelectionReturnException))
             {
@@ -31,12 +24,17 @@ namespace SynOS_v2.Applications
                     Console.ReadKey();
                 }
             }
-            applications[selection.selectionIndex].Run();
+            loadedApplications[selection.selectionIndex].Run();
         }
 
         public override void Init()
         {
             Console.Title = "SynOS - Hauptmenü";
+            foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
+            {
+                listSelection.elements.Add($"&6└ {item.GetType().Name}");
+                loadedApplications.Add(item);
+            }
         }
     }
 }

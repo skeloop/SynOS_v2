@@ -2,7 +2,6 @@
 using SynOS_v2.Applications;
 using System.Reflection;
 using Libary;
-using Forms;
 
 WindowHelper.SetFullscren();
 Applicationimporter applicationimporter = new Applicationimporter();

@@ -42,7 +42,7 @@ namespace SynOS_v2.Applications
             Console.Clear();
             Console.WriteLine("Alle Klassen im Namespace:");
             ListSelection subList = new ListSelection();
-            variablesSelection.subListSelection = subList;
+            //variablesSelection.subListSelection = subList;
             object selection = classSelection.Show().selection;
             if (selection.GetType() == typeof(SelectionReturnException))
             {
@@ -60,15 +60,15 @@ namespace SynOS_v2.Applications
                 OS.Print($"{info.variableName}", false, ConsoleColor.Gray);
                 OS.Print(" = ", false, ConsoleColor.DarkGray);
                 OS.Print($"'{info.variableValue}'", true, ConsoleColor.Cyan);
-                variablesSelection.subListSelection.elements.Add(output);
+                //variablesSelection.subListSelection.elements.Add(output);
             }
-            variablesSelection.subListSelection = subList;
-            var sel = variablesSelection.subListSelection.Show();
-            if (sel.GetType() == typeof(SelectionReturnException))
-            {
-                Stop();
-            }
-            OS.Print($"selection: {sel}");
+            //variablesSelection.subListSelection = subList;
+            //var sel = variablesSelection.subListSelection.Show();
+            //if (sel.GetType() == typeof(SelectionReturnException))
+            //{
+            //    Stop();
+            //}
+            //OS.Print($"selection: {sel}");
 
 
             return;

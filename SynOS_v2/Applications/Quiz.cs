@@ -78,17 +78,16 @@ namespace SynOS_v2.Applications
             });
             questionList.Add(new()
             {
-                question = "Wo kann ich Variablen deklarieren?",
+                question = "Was bedeutet 'itemAnzahl += 5'?",
                 answerSelection = new ListSelection()
                 {
                     elements = new()
                     {
-                        "Nur in einer Klasse",
-                        "Nur in einer Methode",
-                        "In einer Klasse und Methode",
+                        "Es werden 5 Kopien von itemAnzahl erstellt",
+                        "Es wird 5 auf itemAnzahl gerechnet",
                     }
                 },
-                correctAnswer = 2
+                correctAnswer = 1
             });
             questionList.Add(new()
             {
@@ -104,17 +103,65 @@ namespace SynOS_v2.Applications
                 },
                 correctAnswer = 1
             });
+            questionList.Add(new()
+            {
+                question = "Stimmt das?\nIn einer Klasse kann man Variablen und Methoden erstellen",
+                answerSelection = new ListSelection()
+                {
+                    elements = new()
+                    {
+                        "Ja?",
+                        "Nein?",
+                    }
+                },
+                correctAnswer = 0
+            });
+            questionList.Add(new()
+            {
+                question = "Stimmt das?\nIn einer Methode kann man eine Klasse erstellen",
+                answerSelection = new ListSelection()
+                {
+                    elements = new()
+                    {
+                        "Ja?",
+                        "Nein?",
+                    }
+                },
+                correctAnswer = 1
+            });
+            questionList.Add(new()
+            {
+                question = "Wo muss ein Semikolon hin?",
+                answerSelection = new ListSelection()
+                {
+                    elements = new()
+                    {
+                        "Nach der Deklarierung einer Variable",
+                        "An das Ende einer Klasse",
+                        "Nach der Deklarierung einer Variable & bei Aufrufen",
+                    }
+                },
+                correctAnswer = 2
+            });
         }
 
         public override void Update()
         {
-            var qs = questionList;
-
-            foreach (var item in qs)
+            var defindedQuestions = questionList;
+            var correctAwnsers = 0;
+            foreach (var item in defindedQuestions)
             {
-                $"\n {item.answerSelection.Show($" &6┌─‹ &5Beantworte diese frage \n&3{item.question}")}".Print();
+                SelectionInformation selection;
+                 $"\n {selection = item.answerSelection.Show($" &6┌─‹ &5Beantworte diese Frage \n&3{item.question}")}".Print();
+                if (selection.selectionIndex == item.correctAnswer)
+                {
+                    correctAwnsers++;
+                }
             }
-            
+            $"&5Du hast &2{correctAwnsers}&6/&2{questionList.Count}".Print(0, 5);
+            Console.ReadKey();
+            Stop();
+            OS.rootApplication.Run();
         }
     }
 }

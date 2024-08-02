@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Libary.Components
 {
-    public enum SelectionReturnException { exit }
+    public enum SelectionReturnException { exit, selected }
     public struct SelectionInformation
     {
         public object selection;
@@ -17,24 +17,41 @@ namespace Libary.Components
     }
     public class ListSelection
     {
-
         public ListSelection subListSelection;
         public List<object> elements = new List<object>();
+
+        public int GetHighestElementTextLenght()
+        {
+            char[] chars = [];
+            int number = 0;
+            foreach (var element in elements)
+            {
+                if (element.GetType() == typeof(string))
+                {
+                    chars = element.ToString().ToCharArray();
+                    if (chars.Length > number) number = chars.Length;
+                }
+            }
+            return number;
+        }
         /// <summary>
         /// Zeigt eine Liste mit auswählbaren Elementen
         /// </summary>
-        /// <returns>Gibt 'SelectionInformation' zurück. Enthält weitere Infos für das ausgewählte Element</returns>
+        /// <returns>Gibt 'SelectionReturnException' zurück. Nützlich für weitere Behandlungen die eine Rückgabe brauchen.</returns>
         public SelectionInformation Show(string header = "", string sub = "", bool clearScreen = true)
         {
             Console.Clear();
+
+            if (elements.Count == 0)
+            {
+                return new();
+            }
+
             int currentIndex = 0;
             SelectionInformation selection = new SelectionInformation();
             while (true)
             {
-                if (elements.Count == 0)
-                {
-                    break;
-                }
+
                 if (clearScreen) Console.Clear();
                 if (header != "")
                 {

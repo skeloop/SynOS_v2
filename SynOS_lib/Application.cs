@@ -11,16 +11,25 @@ namespace Libary
     public class Application
     {
         public bool running = true;
-
+        public bool initComplete = false;
         public ApplicationExitException Run()
         {
             running = true;
-            Init();
+            CheckInit();
             while (running)
             {
                 Update();
             }
             return ApplicationExitException.exit;
+        }
+
+        void CheckInit()
+        {
+            if (!initComplete)
+            {
+                Init();
+                initComplete = true;
+            }
         }
 
         public virtual void Init()
