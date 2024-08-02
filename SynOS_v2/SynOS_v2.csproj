@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  <StartupObject>SynOS_v2.Program</StartupObject>
+	  <RepositoryUrl>https://github.com/skeloop/SynOS_v2/tree/v2</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

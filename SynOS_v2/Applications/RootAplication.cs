@@ -14,7 +14,7 @@ namespace SynOS_v2.Applications
         List<Application> loadedApplications = new List<Application>();
         public override void Update()
         {
-            SelectionInformation selection = listSelection.Show("&6┌ &3Installierte Apps\n", "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ┌─Steuerung Tabelle\n[Pfeiltaste hoch] - Nach oben\n[Pfeiltaste runter] - Nach unten\n[Enter] - Auswählen");
+            SelectionInformation selection = listSelection.Show("Installierte Apps", "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ┌─Steuerung Tabelle\n[Pfeiltaste hoch] - Nach oben\n[Pfeiltaste runter] - Nach unten\n[Enter] - Auswählen");
             if (selection.selection == typeof(SelectionReturnException))
             {
                 OS.Print("Irgendetwas hat einen Programm-Schleifenbruch verursacht!", true, ConsoleColor.Red);
@@ -32,7 +32,7 @@ namespace SynOS_v2.Applications
             Console.Title = "SynOS - Hauptmenü";
             foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
             {
-                listSelection.elements.Add($"&6└ {item.GetType().Name}");
+                listSelection.elements.Add($"{item.GetType().Name}");
                 loadedApplications.Add(item);
             }
         }

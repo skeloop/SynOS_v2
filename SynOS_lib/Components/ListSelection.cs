@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -55,17 +56,22 @@ namespace Libary.Components
                 if (clearScreen) Console.Clear();
                 if (header != "")
                 {
-                    header.Print();
+                    $"&6┌ &3{header} &6» &5Wähle ein Element aus...\n&6|".Print();
                     Console.ResetColor();
                 }
                 int i = 0;
                 foreach(var element in elements)
                 {
+                    string leftSymbol = "├";
+                    if(i == elements.Count-1)
+                    {
+                        leftSymbol = "└";
+                    }
                     if (i == currentIndex)
                     {
-                        $"&4{element.ToString()} &5‹".Print();
+                        $"&6{leftSymbol} &4{element.ToString()} &5‹".Print();
                     }
-                    else $"&6{element.ToString()}".Print();
+                    else $"&6{leftSymbol} {element.ToString()}".Print();
                     i++;
                 }
                 sub.Print();
@@ -102,6 +108,32 @@ namespace Libary.Components
             {
                 selection = SelectionReturnException.exit
             };
+        }
+        public void Print(string headerString = "", string subString = "", bool clearScreen = true)
+        {
+            int currentIndex = 0;
+            if (clearScreen) Console.Clear();
+            if (headerString != "")
+            {
+                $"&6┌ &3{headerString} &6» &5Wähle ein Element aus...\n&6|".Print();
+                Console.ResetColor();
+            }
+            int i = 0;
+            foreach (var element in elements)
+            {
+                string leftSymbol = "├";
+                if (i == elements.Count - 1)
+                {
+                    leftSymbol = "└";
+                }
+                if (i == currentIndex)
+                {
+                    $"&6{leftSymbol} &4{element.ToString()} &5‹".Print();
+                }
+                else $"&6{leftSymbol} {element.ToString()}".Print();
+                i++;
+            }
+            subString.Print();
         }
     }
 }

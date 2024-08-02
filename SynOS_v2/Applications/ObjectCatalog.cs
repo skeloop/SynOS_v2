@@ -24,13 +24,14 @@ namespace SynOS_v2.Applications
                 $"&6... &3{item.Name} &5gefunden".Print();
                 object exampleInstance = Activator.CreateInstance(item);
                 classSelection.elements.Add(exampleInstance);
-                Thread.Sleep(RandomNumberGenerator.GetInt32(100, 1500));
+                Thread.Sleep(RandomNumberGenerator.GetInt32(10, 100));
             }
         }
 
 
         public override void Update()
         {
+            /*
             var ex = HandleInput();
             switch(ex)
             {
@@ -38,30 +39,33 @@ namespace SynOS_v2.Applications
                     Stop();
                     OS.rootApplication.Run();
                     return;
-            }
+            }*/
             Console.Clear();
             Console.WriteLine("Alle Klassen im Namespace:");
             ListSelection subList = new ListSelection();
             //variablesSelection.subListSelection = subList;
-            object selection = classSelection.Show().selection;
+            object selection = classSelection.Show();
+
+            // Abbruch der Selektierung
             if (selection.GetType() == typeof(SelectionReturnException))
             {
-                Stop();
-            } 
-            var infos = OS.AnalyzeClass(selection.GetType());
-            foreach(var info in infos)
-            {
-                string output = $"{info.variableModifier} | {info.variableType} | {info.variableName} = {info.variableValue}";
+                $"&2Ups!\n\nHier ist ein Fehler aufgetreten.\nMöchtest du neustarten?\n\n[j] - Ja   [n] - Nein (verlassen)".Print();
+                if (Console.ReadKey().Key == ConsoleKey.J)
+                {
 
-                OS.Print($"{info.variableModifier}", false, ConsoleColor.DarkBlue);
-                OS.Print(" | ", false, ConsoleColor.DarkGray);
-                OS.Print($"{info.variableType}", false, ConsoleColor.Blue);
-                OS.Print(" | ", false, ConsoleColor.DarkGray);
-                OS.Print($"{info.variableName}", false, ConsoleColor.Gray);
-                OS.Print(" = ", false, ConsoleColor.DarkGray);
-                OS.Print($"'{info.variableValue}'", true, ConsoleColor.Cyan);
-                //variablesSelection.subListSelection.elements.Add(output);
+                }
+                if (Console.ReadKey().Key == ConsoleKey.N)
+                {
+                    Stop();
+                }
+            } 
+
+            if (selection.GetType() == typeof(SelectionInformation))
+            {
+                SelectionInformation sel = (SelectionInformation)selection;
+                
             }
+
             //variablesSelection.subListSelection = subList;
             //var sel = variablesSelection.subListSelection.Show();
             //if (sel.GetType() == typeof(SelectionReturnException))
@@ -93,6 +97,52 @@ namespace SynOS_v2.Applications
             } else
             {
                 return ApplicationExitException.restart;
+            }
+        }
+
+        void PrintClassFields(object targetClass)
+        {
+            var infos = OS.AnalyzeClass(targetClass.GetType());
+            foreach (var info in infos)
+            {
+                string output = $"{info.variableModifier} | {info.variableType} | {info.variableName} = {info.variableValue}";
+
+                OS.Print($"{info.variableModifier}", false, ConsoleColor.DarkBlue);
+                OS.Print(" | ", false, ConsoleColor.DarkGray);
+                if (info.variableType == typeof(string))
+                {
+                    OS.Print($"string", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(bool))
+                {
+                    OS.Print($"bool", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(int))
+                {
+                    OS.Print($"int", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(float))
+                {
+                    OS.Print($"float", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(Array))
+                {
+                    OS.Print($"Array", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(List<>))
+                {
+                    OS.Print($"List<>", false, ConsoleColor.Blue);
+                }
+                if (info.variableType == typeof(object))
+                {
+                    OS.Print($"object", false, ConsoleColor.Blue);
+                }
+                OS.Print(" | ", false, ConsoleColor.DarkGray);
+                OS.Print($"{info.variableName}", false, ConsoleColor.Gray);
+                OS.Print(" = ", false, ConsoleColor.DarkGray);
+                OS.Print($"'{info.variableValue}'", true);
+                //.Print();
+                //variablesSelection.subListSelection.elements.Add(output);
             }
         }
     }

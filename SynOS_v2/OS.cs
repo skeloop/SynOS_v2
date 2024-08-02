@@ -144,9 +144,16 @@ namespace SynOS_v2
                 //Print(" | ", false, ConsoleColor.Gray);
                 // Wert des Feldes (falls es instanzierte Objekte gibt) ermitteln
                 object fieldValue = field.GetValue(Activator.CreateInstance(type));
-                classAnalyzeInformation.variableValue = fieldValue.ToString();
-                classAnalyzeInformation.variableName = field.FieldType.Name;
-                classAnalyzeInformation.variableType = fieldValue.ToString();
+                if (fieldValue == null)
+                {
+                    classAnalyzeInformation.variableValue = "&2null";
+                } else
+                {
+                    classAnalyzeInformation.variableValue = fieldValue.ToString();
+                }
+                
+                classAnalyzeInformation.variableName = field.Name;
+                classAnalyzeInformation.variableType = field.FieldType;
                 classAnalyzeInformation.variableModifier = accessModifier;
                 informations.Add(classAnalyzeInformation);
                 //Print(field.FieldType.Name +" ", false, ConsoleColor.Blue);
@@ -195,7 +202,7 @@ namespace SynOS_v2
     {
         public string variableName;
         public string variableModifier;
-        public string variableType;
+        public Type variableType;
         public string variableValue;
     }
 }

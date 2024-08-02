@@ -6,9 +6,18 @@ using System.Threading.Tasks;
 
 namespace Libary.Extension
 {
+    public struct TextAnimation
+    {
+        public string text;
+        public int waitTime;
+    }
+
     public static class ExtensionRegister
     {
+        static Dictionary<string, TextAnimation[]> textAnimationsDictionary = new Dictionary<string, TextAnimation[]>();
         /// <summary>
+        /// Unterstützt farbigen Text in der Konsole:
+        /// 
         ///  1 - Blau
         ///  2 - Rot
         ///  3 - Gelb
@@ -90,5 +99,32 @@ namespace Libary.Extension
             if (message.Contains("&6")) return ConsoleColor.DarkGray;
             return ConsoleColor.White; // Standardfarbe, falls keine Übereinstimmung gefunden wird
         }
+
+        public static void AddTextToAnimation(this string text, int waitTime, string animationID)
+        {
+            TextAnimation animation = new()
+            {
+                text = text,
+                waitTime = waitTime,
+            };
+
+            if (textAnimationsDictionary.TryGetValue(animationID, out var anim))
+            {
+                anim[anim.Length] = animation;
+                textAnimationsDictionary.Remove(animationID);
+                textAnimationsDictionary.TryAdd(animationID, anim);
+            }
+        }
+
+        public static void PlayAnimation(string animationID)
+        {
+            textAnimationsDictionary.TryGetValue(animationID.ToString(), out var anim);
+            foreach(var a in anim)
+            {
+                $"{a.text}".Print();
+                Thread.Sleep(a.waitTime);
+            }
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Libary;
+﻿using Libary.Extension;
 
 namespace SynOS_v2.Applications
 {
@@ -18,25 +18,29 @@ namespace SynOS_v2.Applications
             switch (cmd)
             {
                 case "help":
-                    OS.Print("\nHilfemenü", true);
-                    OS.Print("├ admin > Öffnet die Administration", true);
-                    OS.Print("├ help > Ruft dieses Menü auf", true);
-                    OS.Print("├ list > Zeigt den Inhalt des aktuellen Ordners", true);
-                    OS.Print("├ back > Navigiert zurück", true);
-                    OS.Print("├ cd 'ordner_1/test_ordner/ziel_ordner' > Navigiert zu 'ziel_ordner'", true);
-                    OS.Print("├ copy Ordner/Dateiname > Kopiert das angegebene Objekt", true);
-                    OS.Print("├ cut Ordner/Dateiname > Schneidet das angegebene Objekt aus", true);
-                    OS.Print("├ paste Ordner/Dateiname > Fügt das angegebene Objekt hinzu", true);
-                    OS.Print("├ delete Ordner/Dateiname > Löscht das angegebene Objekt", true);
-                    OS.Print("├ create 'folder/file' name > Erstellt einen Ordner oder eine Datei mit dem angegebenen Name", true);
-                    OS.Print("├ buffer 'create, delete, append, dispose' 'filename'", true);
-                    OS.Print("├ open 'file' > Öffnet eine Datei", true);
-                    OS.Print("└ request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an", true);
+                    $"\n&6┌ &3Hilfemenü".Print();
+                    $"&6├ &5exit > Trennt die Verbindung & zurück zum Hauptmenü".Print();
+                    $"&6├ &5admin > Öffnet die Administration".Print();
+                    $"&6├ &5help > Ruft dieses Menü auf".Print();
+                    $"&6├ &5list > Zeigt den Inhalt des aktuellen Ordners".Print();
+                    $"&6├ &5back > Navigiert zurück".Print();
+                    $"&6├ &5cd 'ordner_1/test_ordner/ziel_ordner' > Navigiert zu 'ziel_ordner'".Print();
+                    $"&6├ &5copy Ordner/Dateiname > Kopiert das angegebene Objekt".Print();
+                    $"&6├ &5cut Ordner/Dateiname > Schneidet das angegebene Objekt aus".Print();
+                    $"&6├ &5paste Ordner/Dateiname > Fügt das angegebene Objekt hinzu".Print();
+                    $"&6├ &5delete Ordner/Dateiname > Löscht das angegebene Objekt".Print();
+                    $"&6├ &5create 'folder/file' name > Erstellt einen Ordner oder eine Datei mit dem angegebenen Name".Print();
+                    $"&6├ &5buffer 'create, delete, append, dispose' 'filename'".Print();
+                    $"&6├ &5open 'file' > Öffnet eine Datei".Print();
+                    $"&6└ &5request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an".Print();
                     break;
                 case "admin":
-                    OS.Print("\nAdministration", true);
-                    OS.Print("├ update *force* > Führt ein Update der Systemdatein durch und stellt diese für den publish bereit.\n                   Bei bedarf kann dieser Vorgang erzwungen werden.", true);
-                    OS.Print("└ request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an", true);
+                    $"\nAdministration".Print();
+                    $"├ update *force* > Führt ein Update der Systemdatein durch und stellt diese für den publish bereit.\n                   Bei bedarf kann dieser Vorgang erzwungen werden.".Print();
+                    $"└ request 'permission' Ordner/Dateiname > Fordert Rechte bei einem Administrator an".Print();
+                    break;
+                case "exit":
+                    Stop();
                     break;
             }
         }
