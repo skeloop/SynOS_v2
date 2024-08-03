@@ -9,6 +9,7 @@ namespace SynOS_v2.Applications
             OS.Print("");
             OS.Print(" ┌── Gebe einen Command ein");
             Console.Write(" ");
+            Animation();
             var command = Console.ReadLine();
             CheckCommand(command);
         }
@@ -69,7 +70,7 @@ namespace SynOS_v2.Applications
             OS.Print("Anonym", false, ConsoleColor.Yellow);
             OS.Print(" | ", false);
             string hostname = "homeserver.nick@linux";
-            OS.Print("> {hostname}:/root/ ", true);
+            OS.Print($"> {hostname}:/root/ ", true);
             OS.Print("------------------------------------------------------------() ", true);
             OS.Print(" root", true);
             OS.Print(" └─ /bin", false);

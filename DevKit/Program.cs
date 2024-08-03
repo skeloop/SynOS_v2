@@ -7,7 +7,7 @@ class Program
     static void Main(string[] args)
     {
         // Serveradresse und Portnummer
-        string serverAddress = "45.93.251.65";
+        string serverAddress = "localhost"; // 45.93.251.65
         int port = 65432;
 
         try
