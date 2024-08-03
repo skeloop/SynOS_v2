@@ -68,7 +68,8 @@ namespace SynOS_v2.Applications
             OS.Print("Account: ", false);
             OS.Print("Anonym", false, ConsoleColor.Yellow);
             OS.Print(" | ", false);
-            OS.Print("> Home_Server:Linux/root ", true);
+            string hostname = "homeserver.nick@linux";
+            OS.Print("> {hostname}:/root/ ", true);
             OS.Print("------------------------------------------------------------() ", true);
             OS.Print(" root", true);
             OS.Print(" └─ /bin", false);
