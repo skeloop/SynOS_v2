@@ -2,6 +2,7 @@
 using Libary.Extension;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace SynOS_v2.Applications
 
         public override void Init()
         {
-            startMenuSel.elements.Add("Plan erstellen");
+            startMenuSel.elements.Add("Termin erstellen");
+            startMenuSel.elements.Add("Erinnerung erstellen");
             startMenuSel.elements.Add("Einstellungen");
         }
 
@@ -31,12 +33,12 @@ namespace SynOS_v2.Applications
 
         public void Create()
         {
-            "&6┌ &3Wie soll dein Plan heißen?".Print();
-            "&5 Name: ".Write();
-            var data = new { name = Console.ReadLine() };
-            "&6┌ &3Gib deinem Projekt eine Beschreibung. &6(Enter drückem zum leer lassen)".Print();
-            "&5 Name: ".Write();
-            Console.ReadLine();
+            var data = new 
+            { 
+                name = "&6┌ &3Wie soll dein Plan heißen?".React("&5 Name: "),
+                description = "&6┌ &3Gib deinem Projekt eine Beschreibung. &6(Enter drückem zum leer lassen)".React(),
+            };
+            
         }
     }
 }
