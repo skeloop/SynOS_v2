@@ -16,10 +16,6 @@ namespace SynOS_v2.Applications
             foreach (var type in types)
             {
                 $"┌ Klasse: {type.Name}".Print();
-                foreach (var type2 in type.Get)
-                {
-
-                }
             }
         }
 

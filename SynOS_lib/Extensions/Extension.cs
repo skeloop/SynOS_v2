@@ -78,7 +78,56 @@ namespace Libary.Extension
             Console.WriteLine();
 
         }
-        
+
+        public static void Write(this string text, int x = 0, int y = 0)
+        {
+            for (int iy = 0; iy < y; iy++)
+            {
+                Console.WriteLine();
+            }
+
+            List<(string, ConsoleColor)> segments = new List<(string, ConsoleColor)>();
+
+            int currentPos = 0;
+            ConsoleColor currentColor = ConsoleColor.White;
+
+            while (currentPos < text.Length)
+            {
+                if (text[currentPos] == '&' && currentPos + 1 < text.Length && char.IsDigit(text[currentPos + 1]))
+                {
+                    if (currentPos > 0)
+                    {
+                        segments.Add((text.Substring(0, currentPos), currentColor));
+                    }
+
+                    currentColor = CheckColor($"&{text[currentPos + 1]}");
+
+                    text = text.Substring(currentPos + 2);
+                    currentPos = 0;
+                }
+                else
+                {
+                    currentPos++;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                segments.Add((text, currentColor));
+            }
+
+
+            Console.SetCursorPosition(x, Console.CursorTop);
+
+            foreach (var (segment, color) in segments)
+            {
+                Console.ForegroundColor = color;
+                Console.Write(segment);
+            }
+            Console.ResetColor();
+
+        }
+
         /// <summary>
         ///  1 - Blau
         ///  2 - Rot
