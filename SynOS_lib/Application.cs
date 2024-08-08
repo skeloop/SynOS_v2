@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IWshRuntimeLibrary;
+using Libary.Extension;
 
 namespace Libary
 {
+
+
     public enum ApplicationExitException { restart, exit }
 
     public class Application
@@ -21,6 +25,28 @@ namespace Libary
                 Update();
             }
             return ApplicationExitException.exit;
+        }
+
+        public void AskForAutostart()
+        {
+            string targetExe = "E:\\C#\\SynOS_v2\\SynOS_v2\\bin\\Debug\\net8.0\\SynOS_v2.exe";
+            while (true)
+            {
+                "&5Möchtest du dass diese App automatisch gestartet wird?".Print();
+                "&6[&2Y: Ja&6] &5| &6[&2N: Nein&6]".Print();
+
+                var key = Console.ReadKey(true).Key; // true, um die Taste nicht auf der Konsole anzuzeigen
+
+                if (key == ConsoleKey.Y)
+                {
+                    CreateShortcut(targetExe);
+                    break; // Beende die Schleife nach dem Erstellen der Verknüpfung
+                }
+                else if (key == ConsoleKey.N)
+                {
+                    break;
+                }
+            }
         }
 
         void CheckInit()
@@ -67,6 +93,35 @@ namespace Libary
         {
 
         }
+
+        static void CreateShortcut(string file)
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string startupPath = System.IO.Path.Combine(appDataPath, @"Microsoft\Windows\Start Menu\Programs\Startup");
+
+            // Name der Verknüpfung
+            string shortcutName = "MeinProgramm.lnk";
+
+            // Vollständiger Pfad zur Verknüpfung
+            string shortcutPath = System.IO.Path.Combine(startupPath, shortcutName);
+
+            // WshShell-Objekt erstellen
+            WshShell shell = new WshShell();
+
+            // Verknüpfungsobjekt erstellen
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+            // Zielpfad der Verknüpfung setzen
+            shortcut.TargetPath = file;
+
+            // Optionale Einstellungen
+            shortcut.WorkingDirectory = System.IO.Path.GetDirectoryName(file);
+            shortcut.Description = "Mein Programm";
+
+            // Verknüpfung speichern
+            shortcut.Save();
+        }
+
         /*
         public void Warnig()
         {

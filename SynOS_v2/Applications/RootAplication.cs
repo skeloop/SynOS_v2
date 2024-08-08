@@ -29,6 +29,7 @@ namespace SynOS_v2.Applications
 
         public override void Init()
         {
+            AskForAutostart();
             Console.Title = "SynOS - Hauptmenü";
             foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
             {

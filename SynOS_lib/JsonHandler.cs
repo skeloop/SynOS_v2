@@ -7,75 +7,55 @@ namespace Libary
 {
     public class JsonHandler
     {
-        private readonly string _filePath;
+        private readonly string _applicationDataPath;
 
         public JsonHandler(string filePath)
         {
-            _filePath = filePath;
+            _applicationDataPath = filePath;
         }
 
-        public async Task<T?> LoadJsonAsync<T>()
+        public object LoadJsonAsync<T>(string filename)
         {
             try
             {
-                if (!File.Exists(_filePath))
+                string filePath = Path.Combine(_applicationDataPath, filename); // Korrigiert
+
+                if (!File.Exists(filePath))
                 {
-                    Console.WriteLine($"Datei {_filePath} wurde nicht gefunden.");
-                    return default;
+                    Console.WriteLine($"Datei {filePath} wurde nicht gefunden.");
+                    return null;
                 }
 
-                var jsonString = await File.ReadAllTextAsync(_filePath);
+                var jsonString = File.ReadAllText(filePath);
                 var data = JsonSerializer.Deserialize<T>(jsonString);
                 return data;
             }
             catch (JsonException)
             {
-                Console.WriteLine($"Fehler beim Dekodieren von JSON aus der Datei {_filePath}.");
-                return default;
+                Console.WriteLine($"Fehler beim Dekodieren von JSON aus der Datei {Path.Combine(_applicationDataPath, filename)}.");
+                return null;
             }
             catch (IOException e)
             {
-                Console.WriteLine($"Fehler beim Lesen der Datei {_filePath}: {e.Message}");
-                return default;
+                Console.WriteLine($"Fehler beim Lesen der Datei {Path.Combine(_applicationDataPath, filename)}: {e.Message}");
+                return null;
             }
         }
 
-        public async Task SaveJsonAsync<T>(T data)
+        public void SaveJsonAsync<T>(T data, string filename)
         {
             try
             {
+                string filePath = Path.Combine(_applicationDataPath, filename + ".json"); // Korrigiert
+
                 var jsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-                await File.WriteAllTextAsync(_filePath, jsonString);
-                Console.WriteLine($"Daten erfolgreich in {_filePath} gespeichert.");
+                File.WriteAllText(filePath, jsonString);
+                Console.WriteLine($"Daten erfolgreich in {filePath} gespeichert.");
             }
             catch (IOException e)
             {
-                Console.WriteLine($"Fehler beim Schreiben in die Datei {_filePath}: {e.Message}");
+                Console.WriteLine($"Fehler beim Schreiben in die Datei {_applicationDataPath}: {e.Message}");
             }
         }
     }
-
-    // Beispielverwendung der Klasse
-    public class Program
-    {
-        public static async Task Main(string[] args)
-        {
-            var handler = new JsonHandler("data.json");
-
-            // Daten speichern
-            var dataToSave = new { Name = "Max Mustermann", Alter = 30, Stadt = "Berlin" };
-            await handler.SaveJsonAsync(dataToSave);
-
-            // Daten laden
-            var loadedData = await handler.LoadJsonAsync<dynamic>();
-            if (loadedData != null)
-            {
-                Console.WriteLine("Geladene Daten:");
-                Console.WriteLine($"Name: {loadedData.Name}");
-                Console.WriteLine($"Alter: {loadedData.Alter}");
-                Console.WriteLine($"Stadt: {loadedData.Stadt}");
-            }
-        }
-    }
-
 }

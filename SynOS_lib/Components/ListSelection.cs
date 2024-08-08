@@ -62,6 +62,10 @@ namespace Libary.Components
                 int i = 0;
                 foreach(var element in elements)
                 {
+                    if (string.Empty == element)
+                    {
+                        "|".Print();
+                    }
                     string leftSymbol = "├";
                     if(i == elements.Count-1)
                     {
