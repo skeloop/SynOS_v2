@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace Libary
 {
-    public class WindowCreator
+    public struct Position
     {
+        public int x, y;
+    }
+
+    public class WindowHelper
+    {
+        public static List<Position> positions = new List<Position>();
         public static void CreateWindow(int width, int height)
         {
             for (int h = 0; h < height; h++)
@@ -67,6 +73,19 @@ namespace Libary
             {
                 GetCursorPos(out POINT pOINT);
                 Console.WriteLine(pOINT.X.ToString() + " | " + pOINT.Y.ToString());
+                positions.Add(new Position()
+                {
+                    x = pOINT.X,
+                    y = pOINT.Y
+                });
+                if (positions.Count > 10000)
+                {
+                    break;
+                }
+                foreach (var position in positions)
+                {
+                    Console.SetCursorPosition(position.x+1, position.y+1);
+                }
             }
             
             Console.ReadKey();
@@ -90,6 +109,8 @@ namespace Libary
                 Console.Write("\n");
             }*/
         }
+        
+
         // Importiere die FindWindow-Funktion aus der user32.dll
         [DllImport("user32.dll", SetLastError = true)]
         private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);

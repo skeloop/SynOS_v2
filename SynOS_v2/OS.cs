@@ -35,13 +35,14 @@ namespace SynOS_v2
             foreach (var app in ApplicationManager.GetApplications("SynOS.Applications"))
             {
                 Console.WriteLine("boot: " + app.GetType().Name);
+                app.CheckInit();
                 Thread.Sleep(random.Next(50, 1000));
                 Console.WriteLine("Done!");
             }
             Print("Starte Input Thread...", true, ConsoleColor.Cyan);
             ProgramLoop();
         }
-        static RootAplication rootApplication = new RootAplication();
+        public static RootAplication rootApplication = new RootAplication();
         static void ProgramLoop()
         {
             Console.WriteLine("Start program loop...");
@@ -144,9 +145,16 @@ namespace SynOS_v2
                 //Print(" | ", false, ConsoleColor.Gray);
                 // Wert des Feldes (falls es instanzierte Objekte gibt) ermitteln
                 object fieldValue = field.GetValue(Activator.CreateInstance(type));
-                classAnalyzeInformation.variableValue = fieldValue.ToString();
-                classAnalyzeInformation.variableName = field.FieldType.Name;
-                classAnalyzeInformation.variableType = fieldValue.ToString();
+                if (fieldValue == null)
+                {
+                    classAnalyzeInformation.variableValue = "&2null";
+                } else
+                {
+                    classAnalyzeInformation.variableValue = fieldValue.ToString();
+                }
+                
+                classAnalyzeInformation.variableName = field.Name;
+                classAnalyzeInformation.variableType = field.FieldType;
                 classAnalyzeInformation.variableModifier = accessModifier;
                 informations.Add(classAnalyzeInformation);
                 //Print(field.FieldType.Name +" ", false, ConsoleColor.Blue);
@@ -195,7 +203,7 @@ namespace SynOS_v2
     {
         public string variableName;
         public string variableModifier;
-        public string variableType;
+        public Type variableType;
         public string variableValue;
     }
 }

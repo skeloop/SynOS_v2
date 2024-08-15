@@ -5,35 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Libary;
 using Libary.Components;
+using Libary.Extension;
 
 namespace SynOS_v2.Applications
 {
     public class RootAplication : Application
     {
         ListSelection listSelection = new ListSelection();
-
-        public override void Start()
+        List<Application> loadedApplications = new List<Application>();
+        public override void Update()
         {
-            for (int i = 0; i < 6 ; i++)
-            {
-                Console.Clear();
-                OS.Print("SynxOS - Hauptmenü", false, ConsoleColor.DarkBlue);
-                OS.Print(" | ", false, ConsoleColor.DarkGray);
-                OS.Print("Hinweis", true, ConsoleColor.Blue);
-                OS.Print("", true);
-                OS.Print("Diese Anwendung ist möglicherweise instabil und kann zu abstürzen führen.", true);
-                var second = 5 - i;
-                OS.Print("Geht weiter in ("+(second) +")", true);
-                Thread.Sleep(1000);
-            }
-            List<Application> applications = new List<Application>();
-            foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
-            {
-                Console.WriteLine("--> "+item.GetType().Name);
-                listSelection.elements.Add(item.GetType().Name);
-                applications.Add(item);
-            }
-            SelectionInformation selection = listSelection.Show();
+            SelectionInformation selection = listSelection.Show("Installierte Apps", "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n ┌─Steuerung Tabelle\n[Pfeiltaste hoch] - Nach oben\n[Pfeiltaste runter] - Nach unten\n[Enter] - Auswählen");
             if (selection.selection == typeof(SelectionReturnException))
             {
                 OS.Print("Irgendetwas hat einen Programm-Schleifenbruch verursacht!", true, ConsoleColor.Red);
@@ -43,13 +25,29 @@ namespace SynOS_v2.Applications
                     Console.ReadKey();
                 }
             }
-            var app = ApplicationManager.GetApplications("SynOS_v2.Applications");
-            app[selection.selectionIndex].Run();
+            if (loadedApplications.Count == 0) 
+            {
+                "&2Es wurden keine aktiven Anwenungen gefunden!".Print();
+                Stop();
+            }
+            else
+            {
+                loadedApplications[selection.selectionIndex].Run();
+            }
         }
 
         public override void Init()
         {
+            AskForAutostart();
             Console.Title = "SynOS - Hauptmenü";
+            foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
+            {
+                if (item.active)
+                {
+                    listSelection.elements.Add($"{item.GetType().Name}");
+                }
+                loadedApplications.Add(item);
+            }
         }
     }
 }

@@ -3,24 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IWshRuntimeLibrary;
+using Libary.Extension;
 
 namespace Libary
 {
+
+
     public enum ApplicationExitException { restart, exit }
 
     public class Application
     {
         public bool running = true;
+        public bool initComplete = false;
+        public bool active = false;
 
         public ApplicationExitException Run()
         {
-            Init();
-            Start();
+            running = true;
             while (running)
             {
                 Update();
             }
             return ApplicationExitException.exit;
+        }
+
+        public void AskForAutostart()
+        {
+            string targetExe = "E:\\C#\\SynOS_v2\\SynOS_v2\\bin\\Debug\\net8.0\\SynOS_v2.exe";
+            while (true)
+            {
+                "&5Möchtest du dass diese App automatisch gestartet wird?".Print();
+                "&6[&2Y: Ja&6] &5| &6[&2N: Nein&6]".Print();
+
+                var key = Console.ReadKey(true).Key; // true, um die Taste nicht auf der Konsole anzuzeigen
+
+                if (key == ConsoleKey.Y)
+                {
+                    CreateShortcut(targetExe);
+                    break; // Beende die Schleife nach dem Erstellen der Verknüpfung
+                }
+                else if (key == ConsoleKey.N)
+                {
+                    break;
+                }
+            }
+        }
+
+        public void CheckInit()
+        {
+            if (!initComplete)
+            {
+                Init();
+                initComplete = true;
+            }
         }
 
         public virtual void Init()
@@ -33,13 +69,6 @@ namespace Libary
             Console.WriteLine("(This message cannot be disabled)");
         }
 
-        public virtual void Start()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Warning! Empty application setup.");
-            Console.WriteLine("Please add 'Start()' function to your application\n\n\n\n");
-            Console.ResetColor();
-        }
         public virtual void Update()
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -48,8 +77,10 @@ namespace Libary
             Console.WriteLine("Pressing any key continues the loop...");
             Console.ResetColor();
             Console.ReadKey();
+            Stop();
 
         }
+        // Stoppt die Application
         public virtual void Stop()
         {
             running = false;
@@ -64,5 +95,50 @@ namespace Libary
         {
 
         }
+
+        static void CreateShortcut(string file)
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string startupPath = System.IO.Path.Combine(appDataPath, @"Microsoft\Windows\Start Menu\Programs\Startup");
+
+            // Name der Verknüpfung
+            string shortcutName = "MeinProgramm.lnk";
+
+            // Vollständiger Pfad zur Verknüpfung
+            string shortcutPath = System.IO.Path.Combine(startupPath, shortcutName);
+
+            // WshShell-Objekt erstellen
+            WshShell shell = new WshShell();
+
+            // Verknüpfungsobjekt erstellen
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+            // Zielpfad der Verknüpfung setzen
+            shortcut.TargetPath = file;
+
+            // Optionale Einstellungen
+            shortcut.WorkingDirectory = System.IO.Path.GetDirectoryName(file);
+            shortcut.Description = "Mein Programm";
+
+            // Verknüpfung speichern
+            shortcut.Save();
+        }
+
+        /*
+        public void Warnig()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Clear();
+                Print.Add("SynxOS - Hauptmenü", false, ConsoleColor.DarkBlue);
+                Print.Add(" | ", false, ConsoleColor.DarkGray);
+                Print.Add("Hinweis", true, ConsoleColor.Blue);
+                Print.Add("", true);
+                Print.Add("Diese Anwendung ist möglicherweise instabil und kann zu abstürzen führen.", true);
+                var second = 5 - i;
+                Print.Add("Geht weiter in (" + (second) + ")...", true);
+                Thread.Sleep(1000);
+            }
+        }*/
     }
 }
