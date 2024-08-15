@@ -116,9 +116,6 @@ namespace Libary.Extension
                 segments.Add((text, currentColor));
             }
 
-
-            Console.SetCursorPosition(x, Console.CursorTop);
-
             foreach (var (segment, color) in segments)
             {
                 Console.ForegroundColor = color;

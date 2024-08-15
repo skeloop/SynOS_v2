@@ -16,10 +16,11 @@ namespace Libary
     {
         public bool running = true;
         public bool initComplete = false;
+        public bool active = false;
+
         public ApplicationExitException Run()
         {
             running = true;
-            CheckInit();
             while (running)
             {
                 Update();
@@ -49,7 +50,7 @@ namespace Libary
             }
         }
 
-        void CheckInit()
+        public void CheckInit()
         {
             if (!initComplete)
             {
@@ -79,6 +80,7 @@ namespace Libary
             Stop();
 
         }
+        // Stoppt die Application
         public virtual void Stop()
         {
             running = false;

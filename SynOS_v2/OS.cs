@@ -35,6 +35,7 @@ namespace SynOS_v2
             foreach (var app in ApplicationManager.GetApplications("SynOS.Applications"))
             {
                 Console.WriteLine("boot: " + app.GetType().Name);
+                app.CheckInit();
                 Thread.Sleep(random.Next(50, 1000));
                 Console.WriteLine("Done!");
             }

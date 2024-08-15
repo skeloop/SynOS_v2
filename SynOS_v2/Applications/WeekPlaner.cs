@@ -5,12 +5,11 @@ namespace SynOS_v2.Applications
 {
     public class WeekPlaner : Application
     {
-        JsonHandler projects = new($"data/applications/WeekPlaner/projects");
-
         ListSelection startMenuSel = new ListSelection();
-
+        
         public override void Init()
         {
+            active = true;
             startMenuSel.elements.Add("Plan laden");
             startMenuSel.elements.Add("Plan erstellen");
             startMenuSel.elements.Add("Erinnerung erstellen");
@@ -46,7 +45,7 @@ namespace SynOS_v2.Applications
                 description = "&6┌ &3Gib eine Beschreibung ein... &6(Enter drücken zum leer lassen)".React(),
             };
             "Plan wurde erstellt".Print();
-            projects.SaveJsonAsync(data, $"project_data_{data.name}");
+
             Thread.Sleep(1500);
             LoadProject(data.name);
         }
@@ -54,12 +53,7 @@ namespace SynOS_v2.Applications
         ListSelection tasksSelection = new ListSelection();
         public void LoadProject(string projectname)
         {
-            ProjectData data = projects.LoadJsonAsync<ProjectData>("d") as ProjectData;
-            foreach(var task in data.Tasks)
-            {
-                tasksSelection.elements.Add(task);
-            }
-            tasksSelection.Show();
+
         }
 
 

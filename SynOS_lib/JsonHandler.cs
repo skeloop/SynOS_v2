@@ -1,61 +1,32 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Libary
 {
     public class JsonHandler
     {
-        private readonly string _applicationDataPath;
+        private readonly string _filePath;
 
         public JsonHandler(string filePath)
         {
-            _applicationDataPath = filePath;
+            _filePath = filePath;
         }
 
-        public object LoadJsonAsync<T>(string filename)
+        public void Save(object obj)
         {
-            try
-            {
-                string filePath = Path.Combine(_applicationDataPath, filename); // Korrigiert
+            var propertiesToSave = new Dictionary<string, object>();
 
-                if (!File.Exists(filePath))
+            Type type = obj.GetType();
+            foreach (PropertyInfo property in type.GetProperties())
+            {
+                if (property.GetCustomAttribute<SaveToJsonAttribute>() != null)
                 {
-                    Console.WriteLine($"Datei {filePath} wurde nicht gefunden.");
-                    return null;
+                    propertiesToSave[property.Name] = property.GetValue(obj);
                 }
+            }
 
-                var jsonString = File.ReadAllText(filePath);
-                var data = JsonSerializer.Deserialize<T>(jsonString);
-                return data;
-            }
-            catch (JsonException)
-            {
-                Console.WriteLine($"Fehler beim Dekodieren von JSON aus der Datei {Path.Combine(_applicationDataPath, filename)}.");
-                return null;
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine($"Fehler beim Lesen der Datei {Path.Combine(_applicationDataPath, filename)}: {e.Message}");
-                return null;
-            }
-        }
-
-        public void SaveJsonAsync<T>(T data, string filename)
-        {
-            try
-            {
-                string filePath = Path.Combine(_applicationDataPath, filename + ".json"); // Korrigiert
-
-                var jsonString = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(filePath, jsonString);
-                Console.WriteLine($"Daten erfolgreich in {filePath} gespeichert.");
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine($"Fehler beim Schreiben in die Datei {_applicationDataPath}: {e.Message}");
-            }
+            string json = JsonConvert.SerializeObject(propertiesToSave, Formatting.Indented);
+            File.WriteAllText(_filePath, json);
         }
     }
 }

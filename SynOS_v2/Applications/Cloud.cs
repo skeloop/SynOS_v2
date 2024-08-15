@@ -1,9 +1,12 @@
 ﻿using Libary.Extension;
+using SynOS_v2.Network;
 
 namespace SynOS_v2.Applications
 {
     public class Cloud : Application
     {
+        DirectoryManager directoryManager = new();
+
         public override void Update()
         {
             OS.Print("");
@@ -112,4 +115,6 @@ namespace SynOS_v2.Applications
     {
         public SecrurityLevel secrurityLevel;
     }
+
+
 }

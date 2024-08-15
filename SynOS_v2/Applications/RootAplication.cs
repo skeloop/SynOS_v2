@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Libary;
 using Libary.Components;
+using Libary.Extension;
 
 namespace SynOS_v2.Applications
 {
@@ -24,7 +25,15 @@ namespace SynOS_v2.Applications
                     Console.ReadKey();
                 }
             }
-            loadedApplications[selection.selectionIndex].Run();
+            if (loadedApplications.Count == 0) 
+            {
+                "&2Es wurden keine aktiven Anwenungen gefunden!".Print();
+                Stop();
+            }
+            else
+            {
+                loadedApplications[selection.selectionIndex].Run();
+            }
         }
 
         public override void Init()
@@ -33,7 +42,10 @@ namespace SynOS_v2.Applications
             Console.Title = "SynOS - Hauptmenü";
             foreach (var item in ApplicationManager.GetApplications("SynOS_v2.Applications"))
             {
-                listSelection.elements.Add($"{item.GetType().Name}");
+                if (item.active)
+                {
+                    listSelection.elements.Add($"{item.GetType().Name}");
+                }
                 loadedApplications.Add(item);
             }
         }
